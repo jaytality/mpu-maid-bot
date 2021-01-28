@@ -7,14 +7,18 @@
 import os
 import secrets
 import mysql.connector
+import valve.rcon
 
 from dotenv import load_dotenv
 from discord.ext import commands
 
 load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='!')
+token = os.getenv('DISCORD_TOKEN')
+server_address = (os.getenv('SERVER_HOST'), os.getenv('SERVER_PORT'))
+server_password = os.getenv('SERVER_PASS')
+
+bot = commands.Bot(command_prefix='!maid ')
 secretsGenerator = secrets.SystemRandom()
 
 try:
@@ -58,7 +62,13 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     ]
     await ctx.send(', '.join(dice))
 
-@bot.command(name='site', help='Retrieves specific website details')
+@bot.command(name='whitelist', help='whitelist [player-minecraft-name]')
+async def whitelist(ctx, minecrafter: string):
+    with valve.rcon.RCON(server_address, server_password) as rcon:
+        print(rcon("whitelist add {minecrafter}"))
+        print(rcon("whitelist reload"))
+    msg = "Player {minecrafter} has now been whitelisted".format(ctx.message)
+    await ctx.send(msg)
 
 @bot.event
 async def on_ready():
