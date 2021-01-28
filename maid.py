@@ -74,7 +74,7 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
 #
 # Minecraft Whitelisting
 #
-@bot.command(name='whitelist', help='whitelist [player-minecraft-name]')
+@bot.command(name='whitelist', help='whitelists [player-minecraft-name] on our minecraft server')
 async def whitelist(ctx, minecrafter: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
         resp = mcr.command("/whitelist add " + minecrafter)
