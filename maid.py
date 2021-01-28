@@ -63,7 +63,7 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     await ctx.send(', '.join(dice))
 
 @bot.command(name='whitelist', help='whitelist [player-minecraft-name]')
-async def whitelist(ctx, minecrafter: string):
+async def whitelist(ctx, minecrafter: str):
     with valve.rcon.RCON(server_address, server_password) as rcon:
         print(rcon("whitelist add {minecrafter}"))
         print(rcon("whitelist reload"))
