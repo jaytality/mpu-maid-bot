@@ -5,6 +5,7 @@
 # Creator: Johnathan Tiong <johnathan.tiong@gmail.com>
 #
 import os
+import discord
 import secrets
 import mysql.connector
 
