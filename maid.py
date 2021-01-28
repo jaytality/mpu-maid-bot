@@ -63,7 +63,7 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
 @bot.command(name='whitelist', help='whitelist [player-minecraft-name]')
 async def whitelist(ctx, minecrafter: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
-        resp = mcr.command('"/whitelist add " + minecrafter)
+        resp = mcr.command("/whitelist add " + minecrafter)
         print(resp)
     msg = "Whitelisted " + minecrafter + "! They can now connect to the server".format(ctx.message)
     await ctx.send(msg)
