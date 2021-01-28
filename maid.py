@@ -7,16 +7,14 @@
 import os
 import secrets
 import mysql.connector
-import valve.rcon
 
 from dotenv import load_dotenv
 from discord.ext import commands
+from mcrcon import MCRcon
 
 load_dotenv()
 
 token = os.getenv('DISCORD_TOKEN')
-server_address = (os.getenv('SERVER_HOST'), 25575) # i am a noob - will need adjustment
-server_password = os.getenv('SERVER_PASS')
 
 bot = commands.Bot(command_prefix='!maid ')
 secretsGenerator = secrets.SystemRandom()
@@ -64,8 +62,9 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
 
 @bot.command(name='whitelist', help='whitelist [player-minecraft-name]')
 async def whitelist(ctx, minecrafter: str):
-    with valve.rcon.RCON(server_address, server_password) as rcon:
-        response = rcon.execute("whitelist add " + minecrafter)
+    with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
+        resp = mcr.command('"/whitelist add " + minecrafter)
+        print(resp)
     msg = "Whitelisted " + minecrafter + "! They can now connect to the server".format(ctx.message)
     await ctx.send(msg)
 

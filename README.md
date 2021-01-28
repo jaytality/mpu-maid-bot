@@ -7,7 +7,7 @@ Install the Discord.py, and Python-GValve libraries -
 
 ```
 python3 -m pip install -U discord.py
-python3 -m pip install -U python-valve
+python3 -m pip install -U mcrcon
 ```
 
 Then, run:
