@@ -15,7 +15,7 @@ from discord.ext import commands
 load_dotenv()
 
 token = os.getenv('DISCORD_TOKEN')
-server_address = (os.getenv('SERVER_HOST'), os.getenv('SERVER_PORT'))
+server_address = (os.getenv('SERVER_HOST'), 25575) # i am a noob - will need adjustment
 server_password = os.getenv('SERVER_PASS')
 
 bot = commands.Bot(command_prefix='!maid ')
@@ -65,10 +65,9 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
 @bot.command(name='whitelist', help='whitelist [player-minecraft-name]')
 async def whitelist(ctx, minecrafter: str):
     with valve.rcon.RCON(server_address, server_password) as rcon:
-        print(rcon("whitelist add {minecrafter}"))
-        print(rcon("whitelist reload"))
-    msg = "Player {minecrafter} has now been whitelisted".format(ctx.message)
-    await ctx.send(msg)
+        response = rcon.execute("whitelist add " + minecrafter)
+        response = rcon.execute("whitelist reload")
+    await ctx.send("Whitelisted " + minecrafter + "! They can now connect to the server")
 
 @bot.event
 async def on_ready():
