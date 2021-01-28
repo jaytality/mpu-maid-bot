@@ -9,8 +9,9 @@ import secrets
 import mysql.connector
 
 from dotenv import load_dotenv
-from discord.ext import commands
+from discord.ext import commands, tasks
 from mcrcon import MCRcon
+from mcstatus import MinecraftServer
 
 load_dotenv()
 
@@ -47,11 +48,20 @@ try:
 except Error as e:
     print("Error connecting to DB: ", e)
 
+
+server = MinecraftServer.lookup(os.getenv('SERVER_HOST'))
+
+#
+# Hello test command
+#
 @bot.command(name='hello', help='Responds to a hello message from a user')
 async def hello(ctx):
     msg = "Hello there, {0.author.mention}!".format(ctx.message)
     await ctx.send(msg)
 
+#
+# DnD/TableTop dice rolling
+#
 @bot.command(name='roll', help='roll [number of dice] [number of sides per die]')
 async def roll(ctx, number_of_dice: int, number_of_sides: int):
     dice = [
@@ -60,6 +70,9 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     ]
     await ctx.send(', '.join(dice))
 
+#
+# Minecraft Whitelisting
+#
 @bot.command(name='whitelist', help='whitelist [player-minecraft-name]')
 async def whitelist(ctx, minecrafter: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
@@ -70,14 +83,20 @@ async def whitelist(ctx, minecrafter: str):
 
 @bot.event
 async def on_ready():
-    print('Logged in as ')
-    print(bot.user.name)
+    mcServerStatus.start()
+    print('Logged in as: ' + bot.user.name)
     print('-------------')
 
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.CommandInvokeError):
         await ctx.send(":x: Can't send response correctly (message too long)")
+
+@tasks.loop(seconds=30)
+async def mcServerStatus():
+    status = server.status()
+    statusMsg = "Minecraft: {0} Online".format(status.players.online)
+    await client.change_presense(activity=discord.Game(name=statusMsg))
 
 bot.run(token)
 
