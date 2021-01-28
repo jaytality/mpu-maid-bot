@@ -82,6 +82,9 @@ async def whitelist(ctx, minecrafter: str):
     msg = "Whitelisted " + minecrafter + "! They can now connect to the server".format(ctx.message)
     await ctx.send(msg)
 
+#
+# On Bot Ready
+#
 @bot.event
 async def on_ready():
     mcServerStatus.start()
@@ -93,6 +96,9 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.errors.CommandInvokeError):
         await ctx.send(":x: Can't send response correctly (message too long)")
 
+#
+# Minecraft Status Update (every 30 seconds)
+#
 @tasks.loop(seconds=30)
 async def mcServerStatus():
     status = server.status()
