@@ -90,7 +90,7 @@ async def kick(ctx, minecrafter: str, kickreason: str):
         print(resp)
     msg = ":boot: **" + minecrafter + "** has been **kicked from the server**! Because, [" + kickreason + "]".format(ctx.message)
     await ctx.send(msg)
-    if resp != "No player was found"
+    if resp != 'No player was found':
         channel = bot.get_channel(804134360616796210)
         await channel.send(msg)
         channel = bot.get_channel(804267510500687892)
