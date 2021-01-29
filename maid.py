@@ -74,12 +74,21 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
 #
 # Minecraft Whitelisting
 #
-@bot.command(name='whitelist', help='whitelists [player-minecraft-name] on our minecraft server')
+@bot.command(name='whitelist', help='whitelists [player-minecraft-name] on the MPU Minecraft Server')
 async def whitelist(ctx, minecrafter: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
         resp = mcr.command("/whitelist add " + minecrafter)
         print(resp)
     msg = "Whitelisted " + minecrafter + "! They can now connect to the server".format(ctx.message)
+    await ctx.send(msg)
+
+@bot.command(name='kick', help='kick [minecraft-name] [reason] from the MPU Minecraft Server')
+@commands.has_role('game admin')
+async def kick(ctx, minecrafter: str, kickreason: str):
+    with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
+        resp = mcr.command("/kick " + minecrafter + " " + kickreason)
+        print(resp)
+    msg = ":boot: **" + minecrafter + "** has been **kicked from the server**! Because, " + kickreason.format(ctx.message)
     await ctx.send(msg)
 
 #
