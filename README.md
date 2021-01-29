@@ -17,3 +17,8 @@ Then, run:
 ```
 python3 maid.py
 ```
+
+## Commands
+
+* `!maid whitelist [name]` will Whitelist a Minecrafter to the server
+* `!maid kick [name] [reason]` will boot a player -- both vars **are required**
