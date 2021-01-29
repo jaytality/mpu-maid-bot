@@ -72,8 +72,10 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     await ctx.send(', '.join(dice))
 
 #
-# Minecraft Whitelisting
+# Minecraft
 #
+
+# whitelist a player
 @bot.command(name='whitelist', help='whitelists [player-minecraft-name] on the MPU Minecraft Server')
 async def whitelist(ctx, minecrafter: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
@@ -82,13 +84,44 @@ async def whitelist(ctx, minecrafter: str):
     msg = "Whitelisted " + minecrafter + "! They can now connect to the server".format(ctx.message)
     await ctx.send(msg)
 
-@bot.command(name='kick', help='kick [minecraft-name] "[reason for kicking]" from the MPU Minecraft Server')
+# kick a player
+@bot.command(name='kick', help='kick [minecraft-name] "[reason for kicking]" from the MPU Minecraft Server - reason is required!')
 @commands.has_role('game admin')
 async def kick(ctx, minecrafter: str, kickreason: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
         resp = mcr.command("/kick " + minecrafter + " " + kickreason)
         print(resp)
     msg = ":boot: **" + minecrafter + "** has been **kicked from the server**! Because, [" + kickreason + "]".format(ctx.message)
+    await ctx.send(msg)
+    if resp != 'No player was found':
+        channel = bot.get_channel(804134360616796210)
+        await channel.send(msg)
+        channel = bot.get_channel(804267510500687892)
+        await channel.send(msg)
+
+# ban a player
+@bot.command(name='ban', help='ban [minecraft-name] "[reason for banning]" from the MPU Minecraft Server - reason is required!')
+@commands.has_role('game admin')
+async def ban(ctx, minecrafter: str, kickreason: str):
+    with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
+        resp = mcr.command("/ban " + minecrafter + " " + kickreason)
+        print(resp)
+    msg = ":no_entry_sign: **" + minecrafter + "** has been **banned from the server**! Because, [" + kickreason + "]".format(ctx.message)
+    await ctx.send(msg)
+    if resp != 'No player was found':
+        channel = bot.get_channel(804134360616796210)
+        await channel.send(msg)
+        channel = bot.get_channel(804267510500687892)
+        await channel.send(msg)
+
+# ban a player
+@bot.command(name='unban', help='unban [minecraft-name] from the MPU Minecraft Server')
+@commands.has_role('game admin')
+async def unban(ctx, minecrafter: str):
+    with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
+        resp = mcr.command("/pardon " + minecrafter)
+        print(resp)
+    msg = ":ghost: **" + minecrafter + "** is back! They've been **unbanned from the server**!".format(ctx.message)
     await ctx.send(msg)
     if resp != 'No player was found':
         channel = bot.get_channel(804134360616796210)
