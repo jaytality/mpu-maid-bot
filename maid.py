@@ -88,7 +88,7 @@ async def kick(ctx, minecrafter: str, kickreason: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
         resp = mcr.command("/kick " + minecrafter + " " + kickreason)
         print(resp)
-    msg = ":boot: **" + minecrafter + "** has been **kicked from the server**! Because, " + kickreason.format(ctx.message)
+    msg = ":boot: **" + minecrafter + "** has been **kicked from the server**! Because, [" + kickreason + "]".format(ctx.message)
     await ctx.send(msg)
 
 #
