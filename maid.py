@@ -102,7 +102,7 @@ async def on_command_error(ctx, error):
 @tasks.loop(seconds=30)
 async def mcServerStatus():
     status = server.status()
-    statusMsg = "Minecraft: {0} Online".format(status.players.online)
+    statusMsg = "Minecraft: {0}/50 Online".format(status.players.online)
     await bot.change_presence(activity=discord.Game(name=statusMsg))
 
 bot.run(token)
