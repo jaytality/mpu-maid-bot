@@ -82,7 +82,7 @@ async def whitelist(ctx, minecrafter: str):
     msg = "Whitelisted " + minecrafter + "! They can now connect to the server".format(ctx.message)
     await ctx.send(msg)
 
-@bot.command(name='kick', help='kick [minecraft-name] [reason] from the MPU Minecraft Server')
+@bot.command(name='kick', help='kick [minecraft-name] "[reason for kicking]" from the MPU Minecraft Server')
 @commands.has_role('game admin')
 async def kick(ctx, minecrafter: str, kickreason: str):
     with MCRcon(os.getenv('SERVER_HOST'), os.getenv('SERVER_PASS')) as mcr:
@@ -90,10 +90,11 @@ async def kick(ctx, minecrafter: str, kickreason: str):
         print(resp)
     msg = ":boot: **" + minecrafter + "** has been **kicked from the server**! Because, [" + kickreason + "]".format(ctx.message)
     await ctx.send(msg)
-    channel = bot.get_channel(804134360616796210)
-    await channel.send(msg)
-    channel = bot.get_channel(804267510500687892)
-    await channel.send(msg)
+    if resp != "No player was found"
+        channel = bot.get_channel(804134360616796210)
+        await channel.send(msg)
+        channel = bot.get_channel(804267510500687892)
+        await channel.send(msg)
 
 #
 # On Bot Ready
